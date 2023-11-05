@@ -58,11 +58,7 @@ function App() {
           {data.map((item) => (
             <li key={item.id}>
               {item.task}{" "}
-              {!item.completed && (
-                <>
-                  <button onClick={() => handleDeleteTask(item.id)}>X</button>
-                </>
-              )}
+              <button onClick={() => handleDeleteTask(item.id)}>X</button>
             </li>
           ))}
         </ul>
