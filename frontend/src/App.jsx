@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import "./App.css";
 
 function App() {
@@ -62,9 +60,7 @@ function App() {
               {item.task}{" "}
               {!item.completed && (
                 <>
-                  <button onClick={() => handleDeleteTask(item.id)}>
-                    <FontAwesomeIcon icon={faTrash} />
-                  </button>
+                  <button onClick={() => handleDeleteTask(item.id)}>X</button>
                 </>
               )}
             </li>
