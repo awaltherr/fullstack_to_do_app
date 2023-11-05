@@ -50,7 +50,7 @@ app.delete("/api/:taskId", async (request, response) => {
     return;
   }
 
-  const query = "DELETE FROM to_do WHERE id =$1";
+  const query = "DELETE FROM to_do WHERE id = $1";
   const values = [taskId];
 
   try {
@@ -61,7 +61,7 @@ app.delete("/api/:taskId", async (request, response) => {
       response.status(404).json({ error: "Task was not found" });
     }
   } catch (error) {
-    connsole.error("Error accured removing task:", error);
+    console.error("Error accured removing task:", error);
     response
       .status(500)
       .json({ error: "Something went wrong by removing task" });

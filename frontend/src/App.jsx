@@ -5,6 +5,18 @@ function App() {
   const [data, setData] = useState([]);
   const [newTask, setNewTask] = useState("");
 
+  const fetchfromDb = () => {
+    fetch("/api")
+      .then((response) => response.json())
+      .then((result) => {
+        setData(result);
+      });
+  };
+
+  useEffect(() => {
+    fetchfromDb();
+  }, [data]);
+
   const handleNewTask = () => {
     fetch("/api", {
       method: "POST",
@@ -15,12 +27,9 @@ function App() {
     })
       .then((response) => response.json())
       .then(() => {
-        fetch("/api")
-          .then((response) => response.json())
-          .then((newTask) => {
-            setData([...data, newTask]);
-            setNewTask("");
-          });
+        setNewTask("");
+        setData((prevData) => [...prevData]);
+        fetchfromDb();
       });
   };
 
@@ -32,14 +41,6 @@ function App() {
       setData(updatedList);
     });
   };
-
-  useEffect(() => {
-    fetch("/api")
-      .then((response) => response.json())
-      .then((result) => {
-        setData(result);
-      });
-  }, []);
 
   return (
     <>
