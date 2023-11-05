@@ -24,47 +24,31 @@ app.get("/api", async (_request, response) => {
 
 app.post("/api", async (request, response) => {
   const { task } = request.body;
-  if (task) {
-    const query = "INSERT INTO to_do (task) VALUES ($1) RETURNING *";
-    const values = [task];
-
-    try {
-      const { rows } = await client.query(query, values);
-      response.status(201).json(rows[0]);
-    } catch (error) {
-      console.error("Error inserting data:", error);
-      response
-        .status(500)
-        .json({ error: "Something went wrong inserting data" });
-    }
-  } else {
-    response.status(400).json({ error: "Invalid data" });
+  if (!task) {
+    return response.status(400).json({ error: "Invalid data" });
   }
+
+  const query = "INSERT INTO to_do (task) VALUES ($1) RETURNING *";
+  const values = [task];
+
+  const { rows } = await client.query(query, values);
+  response.status(201).json(rows[0]);
 });
 
 app.delete("/api/:taskId", async (request, response) => {
   const taskId = request.params.taskId;
-
   if (!taskId) {
-    response.status(400).json({ error: "Invalid ID on task" });
-    return;
+    return response.status(400).json({ error: "Invalid ID on task" });
   }
 
   const query = "DELETE FROM to_do WHERE id = $1";
   const values = [taskId];
 
-  try {
-    const result = await client.query(query, values);
-    if (result.rowCount > 0) {
-      response.status(200).json({ message: "Task is deleted" });
-    } else {
-      response.status(404).json({ error: "Task was not found" });
-    }
-  } catch (error) {
-    console.error("Error accured removing task:", error);
-    response
-      .status(500)
-      .json({ error: "Something went wrong by removing task" });
+  const result = await client.query(query, values);
+  if (result.rowCount > 0) {
+    response.status(200).json({ message: "Task deleted" });
+  } else {
+    response.status(404).json({ error: "Task not found" });
   }
 });
 
